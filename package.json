@@ -1,0 +1,22 @@
+{
+	"name": "sopai",
+	"version": "1.0.0",
+	"description": "Dev Framework For AI Agent",
+	"main": "src/index.js",
+	"bin": {
+		"sopai": "./src/index.js"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/michaellinhardt/sopai.git"
+	},
+	"keywords": [
+		"cli",
+		"sopai"
+	],
+	"author": "michaellinhardt",
+	"license": "MIT"
+}
