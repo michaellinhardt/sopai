@@ -11,15 +11,18 @@ AGTS_DIR="./agts"
 
 # Create metrics directory if needed
 mkdir -p "$METRICS_DIR"
-mkdir -p "$AGTS_DIR"
+# AGTS_DIR created as needed when writing report
 
-# Check argument
-if [ -z "$1" ]; then
-    echo "Usage: compression-metrics.sh <file-path>"
+# Check arguments
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: compression-metrics.sh <workflow-folder> <file-path>"
+    echo "  workflow-folder: The workflow folder name (e.g., wkf.1767385361)"
+    echo "  file-path: Path to the file being compressed"
     exit 1
 fi
 
-FILE_PATH="$1"
+WORKFLOW_FOLDER="$1"
+FILE_PATH="$2"
 
 # Verify file exists
 if [ ! -f "$FILE_PATH" ]; then
@@ -103,7 +106,9 @@ ${NEW_SNAPSHOT}
     echo ""
 
     # Save compression report
-    REPORT_FILE="$AGTS_DIR/${FILE_NAME}.compression.md"
+    REPORT_DIR="$AGTS_DIR/$WORKFLOW_FOLDER"
+    mkdir -p "$REPORT_DIR"
+    REPORT_FILE="$REPORT_DIR/${FILE_NAME}.compression.md"
     cat > "$REPORT_FILE" <<REPORT
 # Compression Report: $FILE_NAME
 

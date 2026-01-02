@@ -22,10 +22,14 @@ Compress files directly. No confirmation. Process all files. Always run metrics 
 Before/after compression, run metrics tool:
 
 ```bash
-./compression-metrics.sh "[file-path]"
+./compression-metrics.sh "[workflow-folder]" "[file-path]"
 ```
 
-Tool records snapshot. On second run (after compression), outputs comparison table and saves report to `./agts/[file-name].compression.md`.
+**Arguments:**
+1. `workflow-folder` - The workflow folder name (e.g., `wkf.1767385361`)
+2. `file-path` - Path to the file being compressed
+
+Tool records snapshot. On second run (after compression), outputs comparison table and saves report to `./agts/[workflow-folder]/[file-name].compression.md`.
 
 **Always use this tool before and after compression.**
 
