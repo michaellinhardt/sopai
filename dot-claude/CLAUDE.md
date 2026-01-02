@@ -7,7 +7,7 @@
 - Run multi-agent workflows
 - Optimize context window: avoid unnecessary file reads
 - Read files partially when only classifying
-- Create tasks for all operations
+- Create tasks for all operations with task tool
 - Provide concise workflow state & events log after each task
 
 ## Agent Files
@@ -33,7 +33,7 @@ If `./agts/wkf.xxx/00.workflow.context.md` exist, you have to read it ; else cre
 
 A structured report file of the initial request, what will do this workflow, how, why, etc.. any information you have so far, well structured. What is the acceptance criteria to validate the workflow.
 
-When the workflow is over and you finished your tasks, write a report on the execution. List of tasks accomplished with very short concise summary of the task. List of AGT file related, what they used for. Project file created/edited, concise reason for each. Any relevant informations.
+When the workflow is over and you finished your tasks, write a report on the execution. List of tasks accomplished with very short concise summary of the task. List of AGT file related, what they used for. Project file created/edited, concise reason for each. Agent, Persona, Skills used, Any relevant informations..
 
 ### Naming Convention
 
@@ -72,6 +72,7 @@ When instructed to give all `context` files, it imply path of files in `./agts/w
 
 Create a task for lvl 2 headers
 Create a task for lvl 3 headers, start it with `sub:`
+Create a task per sub agent, start it with `agt:`, add `sub:` first if created from a level 3 header instructions
 
 Headers are sequence to execute one by one.
 

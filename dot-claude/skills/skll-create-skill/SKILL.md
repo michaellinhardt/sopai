@@ -3,7 +3,7 @@ name: skll-create-skill
 description: Guides creation of Claude Code skills - modular packages that extend Claude capabilities with specialized knowledge and workflows. Use when user wants to create a skill, asks about skill format, or mentions SKILL.md files.
 ---
 
-# Creating Claude Code Skills
+# Skill: Create Claude Code Skills
 
 ## What Are Skills
 
@@ -51,7 +51,7 @@ name: skill-name
 description: What it does and when to use it
 ---
 
-# Skill Title
+# Skill: [Skill Name]
 
 ## Instructions
 
@@ -277,7 +277,7 @@ description: Read files without making changes. Use for read-only file access.
 allowed-tools: Read, Grep, Glob
 ---
 
-# Safe File Reader
+# Skill: Safe File Reader
 
 Only use Read, Grep, and Glob tools. Never modify files.
 ```
