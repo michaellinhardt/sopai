@@ -37,38 +37,30 @@ src/
 
 ```
 1. START
-2. Get source directory: process.cwd() + '/dot-claude'
+2. Get source directory: path.join(__dirname, '..', 'dot-claude') (relative to src/commands/)
 3. Get target directory: os.homedir() + '/.claude'
-4. Validate source exists
-   - If not: print error, exit(1)
-5. Create target directory if not exists
+4. Create target directory if not exists
    - mkdir(targetDir, { recursive: true })
-6. Read source directory contents
+5. Read source directory contents
    - fs.readdirSync(sourceDir)
-7. For each item in source:
+6. For each item in source:
    a. Compute source path: sourceDir + '/' + item
    b. Compute target path: targetDir + '/' + item
    c. Check if target exists:
       - If symlink pointing to source: skip (already linked)
       - If regular file/dir: warn, continue
       - If not exists: create symlink
-8. Print summary
-9. END (exit 0)
+7. Print summary
+8. END (exit 0)
 ```
 
 ### Pseudocode
 
 ```javascript
 async function init() {
-  const cwd = process.cwd();
-  const sourceDir = path.join(cwd, 'dot-claude');
+  // Source is the package's own dot-claude folder, not cwd
+  const sourceDir = path.join(__dirname, '..', 'dot-claude');
   const targetDir = path.join(os.homedir(), '.claude');
-
-  // Validate source
-  if (!fs.existsSync(sourceDir)) {
-    console.error('Error: No dot-claude/ folder found');
-    process.exit(1);
-  }
 
   // Create target directory
   if (!fs.existsSync(targetDir)) {
@@ -164,7 +156,6 @@ function isAlreadyLinked(targetPath, expectedSource) {
 
 | Error | Code | Handling |
 |-------|------|----------|
-| Source folder not found | `ENOENT` | Print error, exit(1) |
 | Permission denied (read) | `EACCES` | Print error, exit(1) |
 | Permission denied (write) | `EACCES` | Print error, exit(1) |
 | Symlink creation failed | Various | Print warning, continue |
@@ -174,7 +165,6 @@ function isAlreadyLinked(targetPath, expectedSource) {
 
 ```javascript
 const ERROR_MESSAGES = {
-  NO_SOURCE: 'Error: No dot-claude/ folder found in current directory.\nCreate a dot-claude/ folder with your Claude Code configuration files.',
   PERMISSION_DENIED: 'Error: Permission denied - {details}\nPlease check your permissions or run with appropriate privileges.',
   GENERIC: 'Error: {message}'
 };
@@ -249,8 +239,8 @@ const os = require('os');
 module.exports = async function init() {
   console.log('sopai init - Linking Claude Code configuration\n');
 
-  const cwd = process.cwd();
-  const sourceDir = path.join(cwd, 'dot-claude');
+  // Source is the package's own dot-claude folder (relative to this file in src/commands/)
+  const sourceDir = path.join(__dirname, '..', '..', 'dot-claude');
   const targetDir = path.join(os.homedir(), '.claude');
 
   // Implementation here...
@@ -263,10 +253,10 @@ module.exports = async function init() {
 
 1. **Fresh install**: Remove `~/.claude/`, run `sopai init`
 2. **Re-run**: Run `sopai init` twice consecutively
-3. **Add new file**: Add file to `dot-claude/`, run `sopai init`
+3. **Package update**: Update sopai package with new files in `dot-claude/`, run `sopai init`
 4. **Conflicting file**: Create regular file in `~/.claude/`, run `sopai init`
-5. **Missing source**: Run from directory without `dot-claude/`
-6. **Permission test**: Test with read-only home directory
+5. **Permission test**: Test with read-only home directory
+6. **Run from anywhere**: Run `sopai init` from different directories to verify it works globally
 
 ### Verification Commands
 
@@ -349,16 +339,9 @@ function linkItem(sourcePath, targetPath, itemName) {
 module.exports = function init() {
   console.log('sopai init - Linking Claude Code configuration\n');
 
-  const cwd = process.cwd();
-  const sourceDir = path.join(cwd, 'dot-claude');
+  // Source is the package's own dot-claude folder (relative to this file in src/commands/)
+  const sourceDir = path.join(__dirname, '..', '..', 'dot-claude');
   const targetDir = path.join(os.homedir(), '.claude');
-
-  // Validate source directory
-  if (!fs.existsSync(sourceDir)) {
-    console.error('Error: No dot-claude/ folder found in current directory.');
-    console.error('Create a dot-claude/ folder with your Claude Code configuration files.');
-    process.exit(1);
-  }
 
   // Create target directory
   try {

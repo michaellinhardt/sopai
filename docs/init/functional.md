@@ -6,20 +6,20 @@
 sopai init
 ```
 
-No arguments or flags required.
+No arguments or flags required. This is a global command that works from any directory.
 
 ## User-Facing Behavior
 
 ### Prerequisites
 
-1. User must be in a directory containing a `dot-claude/` folder
-2. The `dot-claude/` folder should contain Claude Code configuration files
+1. sopai must be installed globally via npm (`npm install -g sopai`)
+2. The sopai package includes a `dot-claude/` folder with default configuration
 
 ### Execution Flow
 
-1. **Validation**: Command checks for `dot-claude/` folder existence
+1. **Locate Source**: Command finds the `dot-claude/` folder within the sopai package installation
 2. **Directory Creation**: Creates `~/.claude/` if it doesn't exist
-3. **Scanning**: Reads all items (files and folders) in `dot-claude/`
+3. **Scanning**: Reads all items (files and folders) in the package's `dot-claude/`
 4. **Linking**: Creates symbolic links for each item to `~/.claude/`
 5. **Reporting**: Outputs summary of actions taken
 
@@ -27,12 +27,11 @@ No arguments or flags required.
 
 ### Use Case 1: First-Time Setup
 
-**Scenario**: Developer clones a project and needs to set up Claude Code configuration.
+**Scenario**: Developer installs sopai and wants to set up Claude Code configuration.
 
 **Steps**:
-1. Clone the repository
-2. Navigate to project root
-3. Run `sopai init`
+1. Install sopai globally: `npm install -g sopai`
+2. Run `sopai init` (from any directory)
 
 **Expected Output**:
 ```
@@ -46,12 +45,12 @@ Linked: commands/ -> ~/.claude/commands/
 Summary: 3 items linked, 0 skipped
 ```
 
-### Use Case 2: Re-Running After Adding New Config
+### Use Case 2: Re-Running After Package Update
 
-**Scenario**: Team member adds new configuration file to `dot-claude/`, user pulls changes and re-runs init.
+**Scenario**: sopai package is updated with new configuration files, user re-runs init.
 
 **Steps**:
-1. Pull latest changes
+1. Update sopai: `npm update -g sopai`
 2. Run `sopai init`
 
 **Expected Output**:
@@ -80,21 +79,7 @@ Summary: 0 items linked, 2 skipped
 All configuration already linked.
 ```
 
-### Use Case 4: Missing dot-claude Folder
-
-**Scenario**: User runs command in a directory without `dot-claude/`.
-
-**Expected Output**:
-```
-sopai init - Linking Claude Code configuration
-
-Error: No dot-claude/ folder found in current directory.
-Create a dot-claude/ folder with your Claude Code configuration files.
-```
-
-**Exit Code**: 1
-
-### Use Case 5: Permission Error
+### Use Case 4: Permission Error
 
 **Scenario**: User lacks permission to create `~/.claude/` or symlinks.
 
@@ -108,7 +93,7 @@ Please check your permissions or run with appropriate privileges.
 
 **Exit Code**: 1
 
-### Use Case 6: Conflicting File Exists
+### Use Case 5: Conflicting File Exists
 
 **Scenario**: A regular file (not symlink) already exists at target location.
 
@@ -138,7 +123,6 @@ Summary: 1 item linked, 0 skipped, 1 warning
 
 | Situation | Message Format |
 |-----------|----------------|
-| No dot-claude folder | `Error: No dot-claude/ folder found in current directory.` |
 | Permission denied | `Error: Permission denied - {details}` |
 | Generic error | `Error: {error message}` |
 
@@ -153,7 +137,7 @@ Summary: 1 item linked, 0 skipped, 1 warning
 | Code | Meaning |
 |------|---------|
 | 0 | Success (all items linked or skipped) |
-| 1 | Error (missing folder, permission denied, etc.) |
+| 1 | Error (permission denied, etc.) |
 
 ## Behavior Rules
 
@@ -174,5 +158,5 @@ The command links all items in `dot-claude/` including:
 ## Symlink Details
 
 - **Type**: Symbolic links (soft links)
-- **Direction**: `~/.claude/{item}` -> `{project}/dot-claude/{item}`
+- **Direction**: `~/.claude/{item}` -> `{sopai-package}/dot-claude/{item}`
 - **Resolution**: Absolute paths for reliability

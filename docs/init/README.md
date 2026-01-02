@@ -2,15 +2,15 @@
 
 ## Overview
 
-The `sopai init` command links Claude Code configuration files from the project's `dot-claude/` folder to the user's home directory `~/.claude/`.
+The `sopai init` command links Claude Code configuration files from the **sopai npm package's built-in `dot-claude/` folder** to the user's home directory `~/.claude/`.
 
-This enables project-specific Claude Code configurations to be version-controlled within the repository while being accessible system-wide by Claude Code.
+This is a global command that works from anywhere - it always links the configuration files bundled with the sopai package itself.
 
 ## Purpose
 
-- **Configuration Sharing**: Share Claude Code settings across team members via version control
-- **Project-Specific Setup**: Each project can define its own Claude Code configuration
-- **Easy Onboarding**: New contributors run `sopai init` to get the project's Claude settings
+- **Standardized Setup**: Provides consistent Claude Code configuration from the sopai package
+- **Global Command**: Run from any directory - no project-specific folder required
+- **Easy Installation**: Single command to set up Claude Code with sopai's default configuration
 
 ## Quick Start
 
@@ -18,18 +18,15 @@ This enables project-specific Claude Code configurations to be version-controlle
 # Install sopai globally
 npm install -g sopai
 
-# Navigate to your project
-cd your-project
-
-# Initialize Claude Code configuration
+# Initialize Claude Code configuration (run from anywhere)
 sopai init
 ```
 
 ## How It Works
 
-1. Scans the `dot-claude/` folder in your project root
+1. Locates the `dot-claude/` folder within the sopai package installation directory
 2. Creates `~/.claude/` directory if it doesn't exist
-3. Creates symbolic links for each item in `dot-claude/` to `~/.claude/`
+3. Creates symbolic links for each item in the package's `dot-claude/` to `~/.claude/`
 4. Skips items that are already correctly linked
 5. Reports linked and skipped items
 
@@ -40,9 +37,9 @@ sopai init
 
 ## Example
 
-Given a project structure:
+The sopai package contains:
 ```
-your-project/
+sopai/                          # npm package installation
   dot-claude/
     CLAUDE.md
     settings.json
@@ -50,12 +47,12 @@ your-project/
       custom-command.md
 ```
 
-Running `sopai init` creates:
+Running `sopai init` (from any directory) creates:
 ```
 ~/.claude/
-  CLAUDE.md -> your-project/dot-claude/CLAUDE.md
-  settings.json -> your-project/dot-claude/settings.json
-  commands/ -> your-project/dot-claude/commands/
+  CLAUDE.md -> /path/to/sopai/dot-claude/CLAUDE.md
+  settings.json -> /path/to/sopai/dot-claude/settings.json
+  commands/ -> /path/to/sopai/dot-claude/commands/
 ```
 
 ## Related
