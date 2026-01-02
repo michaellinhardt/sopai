@@ -56,6 +56,10 @@
 
 **File [type]:** `context` files = `./agts/wkf.xxx/*context.md`
 
+### Claude Code Files
+
+When requested to create skills, agents, etc.. ( files related to claude-code ), you save them in the appropriate location, either local .claude if exist or home folder .claude.
+
 ## Workflow Syntax
 
 - H2 headers: create task
