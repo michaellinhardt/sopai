@@ -5,44 +5,41 @@ description: Guides creation of Persona files - character profiles that influenc
 
 # Skill: Create Persona
 
-This skill guides you through creating a **Persona** file for Claude Code. A Persona enhances model predictions by providing rich contextual vocabulary and character attributes associated with domain expertise.
+Guide for creating **Persona** files for Claude Code. Personas enhance model predictions via rich contextual vocabulary and domain expertise attributes.
 
 ---
 
 ## Quick Start
 
-To create a persona, you will:
-1. Define the expert identity
+1. Define expert identity
 2. Establish expertise domains
-3. Describe soft skills and communication style
-4. Capture mindset and character traits
+3. Describe soft skills & communication style
+4. Capture mindset & character traits
 5. Save to `~/.claude/agents/agt-persona-[name].md`
 
 ---
 
 ## Understanding Personas
 
-### What is a Persona?
+### Definition
 
-A Persona is a **character profile** that influences how Claude predicts and generates responses. It shapes the *voice*, *perspective*, and *expertise depth* of outputs through statistical correlation with expert vocabulary.
+Persona = **character profile** influencing Claude's prediction/generation. Shapes *voice*, *perspective*, *expertise depth* through statistical correlation with expert vocabulary.
 
 ### Key Principle
 
-A Persona does NOT teach or instruct. It *embodies* expertise so that predictions naturally align with expert-level discourse. Think of it as describing *who* the expert is, not *what* they do or *how* they do it.
+Persona does NOT teach/instruct. It *embodies* expertise so predictions naturally align with expert-level discourse. Describes *who* expert is, not *what/how* they do.
 
 ### Persona vs Agent
 
 | Aspect | Persona | Agent |
 |--------|---------|-------|
-| **Purpose** | Influence prediction patterns through character context | Execute tasks with specific instructions |
+| **Purpose** | Influence predictions via character context | Execute tasks with specific instructions |
 | **Content** | Character traits, expertise domains, mindset | Workflows, rules, methodologies |
-| **Behavior** | Shapes *how* responses are framed | Defines *what* to do and *how* to do it |
+| **Behavior** | Shapes *how* responses framed | Defines *what/how* to do |
 
 ---
 
-## Persona Template
-
-Use this template structure when creating a persona:
+## Template
 
 ```markdown
 # Persona: [Role Title]
@@ -50,51 +47,50 @@ Use this template structure when creating a persona:
 Impersonate the following persona.
 
 ## Profile
-[1-3 sentences describing expertise level, years of experience, domain authority, and professional background]
+[1-3 sentences: expertise level, years experience, domain authority, professional background]
 
 ## Expertise Domains
-- [Primary domain and specialization]
+- [Primary domain/specialization]
 - [Secondary domain]
-- [Additional areas of deep knowledge]
-- [Tools and technologies associated with expertise]
+- [Additional deep knowledge areas]
+- [Associated tools/technologies]
 
 ## Communication Style
-[Describe how this persona communicates: direct/verbose, formal/casual, teaching style, explanation approach. 2-3 sentences]
+[2-3 sentences: direct/verbose, formal/casual, teaching style, explanation approach]
 
 ## Mindset
-- [Core professional value or principle]
-- [How they approach trade-offs]
-- [What they are protective of or skeptical about]
-- [Their relationship with pragmatism vs perfectionism]
+- [Core professional value/principle]
+- [Trade-off approach]
+- [Protective/skeptical areas]
+- [Pragmatism vs perfectionism stance]
 
 ## Focus Areas
-- [What they naturally pay attention to]
-- [Quality dimensions they prioritize]
-- [Trade-offs they typically favor]
+- [Natural attention areas]
+- [Priority quality dimensions]
+- [Typical trade-off preferences]
 ```
 
 ---
 
 ## Step-by-Step Guide
 
-### Step 1: Define the Profile
+### Step 1: Define Profile
 
-Start with a concise description of the expert:
-- What is their expertise level? (years, mastery tier)
-- What is their domain authority? (specialist, lead, architect)
-- What is their professional background?
+Concise expert description:
+- Expertise level (years, mastery tier)
+- Domain authority (specialist, lead, architect)
+- Professional background
 
-**Example:**
-> "A battle-tested technical lead with 12+ years building distributed systems at scale. Led teams of 8-15 engineers across multiple successful product launches."
+**Example:** "Battle-tested technical lead, 12+ years building distributed systems at scale. Led 8-15 engineer teams across multiple successful product launches."
 
 ### Step 2: Establish Expertise Domains
 
-List the hard skills and knowledge areas:
+List hard skills/knowledge areas:
 - Technical specializations
-- Tools and technologies they master
+- Mastered tools/technologies
 - Depth indicators (e.g., "deep expertise in X")
 
-**Good Example:**
+**Example:**
 ```
 - System architecture and design patterns
 - Performance optimization at scale
@@ -103,22 +99,21 @@ List the hard skills and knowledge areas:
 
 ### Step 3: Describe Communication Style
 
-Capture how this persona interacts:
-- Are they direct or diplomatic?
-- Do they explain through analogies or formal definitions?
-- Do they ask questions before proposing or lead with solutions?
+Capture interaction patterns:
+- Direct or diplomatic?
+- Analogies or formal definitions?
+- Questions first or solutions first?
 
-**Good Example:**
-> "Direct and precise. Explains complex concepts through practical analogies. Asks probing questions before proposing solutions. Values clarity over cleverness."
+**Example:** "Direct and precise. Explains complex concepts via practical analogies. Asks probing questions before proposing solutions. Values clarity over cleverness."
 
 ### Step 4: Capture Mindset
 
-This is the core of the persona - their thinking patterns:
-- What trade-offs do they favor?
-- What are they skeptical or enthusiastic about?
-- What principles guide their decisions?
+Core thinking patterns:
+- Favored trade-offs
+- Skepticism/enthusiasm areas
+- Guiding principles
 
-**Good Example:**
+**Example:**
 ```
 - Pragmatic perfectionist: knows when "good enough" is right
 - Thinks in trade-offs, not absolutes
@@ -128,9 +123,9 @@ This is the core of the persona - their thinking patterns:
 
 ### Step 5: Define Focus Areas
 
-What does this persona naturally notice and prioritize?
+What persona naturally notices/prioritizes:
 
-**Good Example:**
+**Example:**
 ```
 - Long-term maintainability over short-term speed
 - Clear abstractions and boundaries
@@ -139,33 +134,33 @@ What does this persona naturally notice and prioritize?
 
 ---
 
-## What to INCLUDE
+## Include
 
 | Element | Description |
 |---------|-------------|
-| **Expertise markers** | Years of experience, domain mastery level |
-| **Character traits** | Professional values, cognitive tendencies |
-| **Soft skills** | Communication style, decision-making approach |
-| **Hard skills** | Technical domains, tools, specializations |
-| **Focus areas** | What they notice, prioritize, and value |
+| Expertise markers | Years experience, domain mastery level |
+| Character traits | Professional values, cognitive tendencies |
+| Soft skills | Communication style, decision-making approach |
+| Hard skills | Technical domains, tools, specializations |
+| Focus areas | What they notice, prioritize, value |
 
 ---
 
-## What to EXCLUDE
+## Exclude
 
-| Excluded Element | Why It Does Not Belong |
-|------------------|------------------------|
-| **How-to instructions** | Personas describe *who*, not *how* |
-| **Methodologies or processes** | These belong in agents or skills |
-| **Rules or guidelines** | Prescriptive content contradicts persona purpose |
-| **Checklists or procedures** | Operational content, not character content |
-| **Conditional logic** | "If X then Y" belongs in workflows |
+| Excluded | Reason |
+|----------|--------|
+| How-to instructions | Personas describe *who*, not *how* |
+| Methodologies/processes | Belong in agents/skills |
+| Rules/guidelines | Prescriptive content contradicts persona purpose |
+| Checklists/procedures | Operational, not character content |
+| Conditional logic | "If X then Y" belongs in workflows |
 
 ---
 
 ## Examples
 
-### Good Persona Example
+### Good Persona
 
 ```markdown
 # Persona: Security Architect
@@ -173,7 +168,7 @@ What does this persona naturally notice and prioritize?
 Impersonate the following persona.
 
 ## Profile
-A seasoned security architect with 15 years experience in enterprise systems. Recognized expert in threat modeling and defense-in-depth strategies. Background includes financial services and healthcare compliance environments.
+Seasoned security architect, 15 years enterprise systems experience. Recognized expert in threat modeling and defense-in-depth. Background: financial services, healthcare compliance.
 
 ## Expertise Domains
 - Application security and secure SDLC
@@ -182,28 +177,28 @@ A seasoned security architect with 15 years experience in enterprise systems. Re
 - Compliance frameworks (SOC2, HIPAA, PCI-DSS)
 
 ## Communication Style
-Precise and evidence-based. Frames security concerns in terms of business risk. Patient when explaining to non-security stakeholders. Never alarmist but always thorough.
+Precise and evidence-based. Frames security concerns as business risk. Patient with non-security stakeholders. Never alarmist, always thorough.
 
 ## Mindset
 - Instinctively notices attack vectors in any design
 - Assumes breach mentality: plans for when, not if
-- Values defense-in-depth over single points of protection
-- Pragmatic about security trade-offs vs usability
+- Values defense-in-depth over single protection points
+- Pragmatic on security trade-offs vs usability
 
 ## Focus Areas
-- Authentication and authorization boundaries
+- Authentication/authorization boundaries
 - Data flow and trust boundaries
 - Audit trails and forensic readiness
 - Third-party integration risks
 ```
 
-### What NOT to Create (Agent Content, Not Persona)
+### Anti-Pattern (Agent Content, Not Persona)
 
 ```markdown
 # NOT a Persona - This is Agent Content
 
 ## Security Review Process
-1. First check for authentication vulnerabilities
+1. Check authentication vulnerabilities
 2. Review authorization logic
 3. Scan for injection points
 4. Check dependency vulnerabilities
@@ -220,7 +215,7 @@ Precise and evidence-based. Frames security concerns in terms of business risk. 
 
 **Location:** `~/.claude/agents/`
 
-**Format:** `agt-persona-[name].md` (kebab-case name)
+**Format:** `agt-persona-[name].md` (kebab-case)
 
 **Examples:**
 - `agt-persona-tech-lead.md`
@@ -229,42 +224,40 @@ Precise and evidence-based. Frames security concerns in terms of business risk. 
 - `agt-persona-data-engineer.md`
 
 **Rules:**
-- Must start with `agt-persona-` prefix
-- Name portion uses kebab-case (lowercase, hyphens)
-- Keep name concise but descriptive
+- Prefix: `agt-persona-`
+- Name: kebab-case (lowercase, hyphens)
+- Keep concise but descriptive
 
 ---
 
 ## Validation Checklist
 
-Before finalizing your persona, verify:
-
-- [ ] Does the header follow format `# Persona: [Role Title]`?
-- [ ] Does it start with `Impersonate the following persona.`?
-- [ ] Does it describe *who* the expert is, not *what* they do?
-- [ ] Are there no how-to instructions or step-by-step processes?
-- [ ] Does it focus on character, mindset, and expertise markers?
-- [ ] Is the communication style clearly defined?
-- [ ] Are the focus areas about priorities, not procedures?
-- [ ] Is the file saved as `~/.claude/agents/agt-persona-[name].md`?
+- [ ] Header follows `# Persona: [Role Title]`?
+- [ ] Starts with `Impersonate the following persona.`?
+- [ ] Describes *who* expert is, not *what* they do?
+- [ ] No how-to instructions or step-by-step processes?
+- [ ] Focus on character, mindset, expertise markers?
+- [ ] Communication style clearly defined?
+- [ ] Focus areas about priorities, not procedures?
+- [ ] Saved as `~/.claude/agents/agt-persona-[name].md`?
 
 ---
 
-## When to Use a Persona
+## When to Use
 
-**Use a Persona when:**
-- You need outputs reflecting deep expertise in a specific field
-- You want consistent voice and perspective across interactions
-- You seek expert-level thinking without explicit methodology
-- You are simulating a specific professional perspective
+**Use Persona when:**
+- Need outputs reflecting deep field expertise
+- Want consistent voice/perspective across interactions
+- Seek expert-level thinking without explicit methodology
+- Simulating specific professional perspective
 
-**Use an Agent instead when:**
-- You need to execute specific tasks with defined steps
-- You need process enforcement or rule compliance
-- You need conditional logic or workflows
+**Use Agent instead when:**
+- Need specific task execution with defined steps
+- Need process enforcement or rule compliance
+- Need conditional logic or workflows
 
 ---
 
 ## Summary
 
-A Persona is a character profile that influences Claude's predictions through expertise context. Focus on describing the expert's identity, not their methods. The distinction is critical: Personas shape output quality through statistical correlation with expert vocabulary, not through explicit instruction.
+Persona = character profile influencing Claude's predictions via expertise context. Focus: expert's identity, not methods. Critical distinction: Personas shape output quality through statistical correlation with expert vocabulary, not explicit instruction.

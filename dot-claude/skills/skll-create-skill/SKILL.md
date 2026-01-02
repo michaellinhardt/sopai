@@ -5,45 +5,35 @@ description: Guides creation of Claude Code skills - modular packages that exten
 
 # Skill: Create Claude Code Skills
 
-## What Are Skills
+## Overview
 
-Skills are modular, self-contained packages that extend Claude's capabilities with specialized knowledge, workflows, and tools. They function as on-demand "onboarding guides" for specific domains.
+Skills = modular packages extending Claude with specialized knowledge/workflows. On-demand "onboarding guides" for domains.
 
-**Key characteristics:**
-- Model-invoked: Claude decides when to use based on description matching
-- On-demand loading: Only metadata pre-loaded; full instructions load when triggered
-- Context-efficient: Specialized knowledge without bloating every conversation
-- Composable: Multiple skills can work together automatically
+**Characteristics:**
+- Model-invoked via description matching
+- On-demand loading (only metadata pre-loaded)
+- Context-efficient
+- Composable (multiple skills work together)
 
 ## File Structure
 
-### Minimum Viable Skill
-
-Every skill requires a directory with a `SKILL.md` file:
+**Minimum:** Directory with `SKILL.md`
 
 ```
 skill-name/
-└── SKILL.md    # Required - core instructions
+└── SKILL.md    # Required
 ```
 
-### Extended Structure
-
-For complex skills:
-
+**Extended:**
 ```
 skill-name/
-├── SKILL.md              # Required - overview and quick start
-├── scripts/              # Optional - executable code
-│   └── helper.py
-├── references/           # Optional - documentation loaded as needed
-│   └── api-docs.md
-└── assets/               # Optional - files used in output
-    └── template.html
+├── SKILL.md              # Required - overview
+├── scripts/              # Optional - executables
+├── references/           # Optional - docs
+└── assets/               # Optional - output files
 ```
 
 ## SKILL.md Format
-
-### Template
 
 ```markdown
 ---
@@ -51,106 +41,72 @@ name: skill-name
 description: What it does and when to use it
 ---
 
-# Skill: [Skill Name]
+# Skill: [Name]
 
 ## Instructions
-
-Step-by-step guidance.
+[Steps]
 
 ## Examples
-
-Concrete usage examples.
+[Usage]
 ```
 
-### Frontmatter Rules
+### Frontmatter
 
-**Required fields:**
-
+**Required:**
 | Field | Constraints |
 |-------|-------------|
-| `name` | Max 64 chars, lowercase, letters/numbers/hyphens only, no "anthropic" or "claude" |
-| `description` | Max 1024 chars, must include what AND when to use |
+| `name` | Max 64 chars, lowercase, letters/numbers/hyphens, no "anthropic"/"claude" |
+| `description` | Max 1024 chars, include WHAT + WHEN |
 
-**Optional fields:**
-
+**Optional:**
 | Field | Example |
 |-------|---------|
 | `allowed-tools` | `Read, Grep, Glob` |
 | `model` | `claude-sonnet-4-20250514` |
 
-**Validation:**
-- YAML uses spaces (not tabs)
-- `---` on line 1 and after frontmatter
-- File must be named exactly `SKILL.md` (case-sensitive)
+**Validation:** YAML spaces (not tabs), `---` on line 1 and after frontmatter, file named `SKILL.md` (case-sensitive)
 
-## Storage Locations
+## Storage
 
 | Location | Scope | Path |
 |----------|-------|------|
-| **Personal** | All your projects | `~/.claude/skills/skill-name/` |
-| **Project** | Single repository | `.claude/skills/skill-name/` |
+| Personal | All projects | `~/.claude/skills/skill-name/` |
+| Project | Single repo | `.claude/skills/skill-name/` |
 
-**Create personal skill:**
-```bash
-mkdir -p ~/.claude/skills/my-skill
-# Then create SKILL.md in that directory
-```
+## Naming
 
-**Create project skill:**
-```bash
-mkdir -p .claude/skills/my-skill
-# Then create SKILL.md in that directory
-```
+**Use gerund form:** `processing-pdfs`, `analyzing-spreadsheets`, `testing-code`
 
-## Naming Conventions
+**Avoid:** Vague (`helper`, `utils`), generic (`documents`), reserved (`anthropic-*`, `claude-*`)
 
-**Use gerund form (verb + -ing):**
-- `processing-pdfs`
-- `analyzing-spreadsheets`
-- `testing-code`
-- `writing-documentation`
+## Descriptions
 
-**Avoid:**
-- Vague names: `helper`, `utils`, `tools`
-- Overly generic: `documents`, `data`
-- Reserved words: `anthropic-*`, `claude-*`
+Critical - Claude uses to decide invocation.
 
-## Writing Descriptions
+**Rules:**
+1. Third person
+2. Specific capabilities + trigger keywords
+3. Include WHAT + WHEN
+4. All triggers in description (body loads AFTER triggering)
 
-The description is critical - Claude uses it to decide when to invoke your skill.
-
-**Guidelines:**
-1. Write in third person
-2. Be specific with capabilities and trigger keywords
-3. Include both WHAT it does and WHEN to use it
-4. Put all trigger info in description (body loads AFTER triggering)
-
-**Good examples:**
-
+**Good:**
 ```yaml
-description: Extract text and tables from PDF files, fill forms, merge documents. Use when working with PDFs, forms, or document extraction.
-
-description: Generates clear commit messages from git diffs. Use when writing commit messages or reviewing staged changes.
+description: Extract text/tables from PDFs, fill forms, merge documents. Use when working with PDFs or document extraction.
 ```
 
-**Bad examples:**
-
+**Bad:**
 ```yaml
 description: Helps with documents  # Too vague
-description: Processes data        # Too generic
-description: Does stuff with files # Missing trigger context
 ```
 
 ## Best Practices
 
 ### 1. Be Concise
-
-Claude is already very smart. Only add context it does not have.
+Claude is smart. Only add context it lacks.
 
 **Good:**
 ```markdown
 ## Extract PDF text
-
 Use pdfplumber:
 ```python
 import pdfplumber
@@ -159,163 +115,111 @@ with pdfplumber.open("file.pdf") as pdf:
 ```
 ```
 
-**Bad:**
-```markdown
-## Extract PDF text
-
-PDF (Portable Document Format) files are a common file format that contains
-text, images, and other content. To extract text from a PDF, you'll need to
-use a library. There are many libraries available...
-```
-
-### 2. Use Progressive Disclosure
-
-- Keep SKILL.md under 500 lines
-- Split large content into reference files
-- Keep references one level deep
-
-```markdown
-## Quick start
-
-[Essential info here]
-
-## Advanced features
-
-See [REFERENCE.md](REFERENCE.md) for complete guide.
-```
+### 2. Progressive Disclosure
+- SKILL.md under 500 lines
+- Split large content to reference files
+- References one level deep
 
 ### 3. Include Concrete Examples
 
 ```markdown
-## Commit format
-
 **Input**: Added error handling to API endpoints
 **Output**:
 ```
 feat(api): add error handling to endpoints
-
 - Add try-catch blocks to all route handlers
 - Return consistent error response format
 ```
 ```
 
-### 4. Test with Multiple Models
+### 4. Test Multiple Models
+Test with Haiku, Sonnet, Opus.
 
-Test with Haiku, Sonnet, and Opus - what works for Opus might need more detail for Haiku.
+## Patterns
 
-## Common Patterns
-
-### Workflow Pattern
-
+### Workflow
 ```markdown
 ## Workflow
+- [ ] Step 1: Analyze
+- [ ] Step 2: Process
+- [ ] Step 3: Validate
 
-Copy this checklist:
-
-```
-- [ ] Step 1: Analyze input
-- [ ] Step 2: Process data
-- [ ] Step 3: Validate output
-```
-
-**Step 1: Analyze input**
+**Step 1: Analyze**
 [Instructions...]
 ```
 
-### Template Pattern
-
+### Template
 ```markdown
 ## Report structure
-
-ALWAYS use this template:
-
+ALWAYS use:
 ```markdown
 # [Title]
-
 ## Summary
-[Overview]
-
 ## Findings
-- Finding 1
-- Finding 2
 ```
 ```
 
-### Conditional Pattern
-
+### Conditional
 ```markdown
-## Workflow selection
-
-**Creating new content?** -> Follow "Creation workflow"
-**Editing existing?** -> Follow "Editing workflow"
+**Creating new?** -> "Creation workflow"
+**Editing existing?** -> "Editing workflow"
 ```
 
-## Example Skills
+## Examples
 
-### Simple Skill
-
+### Simple
 ```markdown
 ---
 name: explaining-code
-description: Explains code with visual diagrams and analogies. Use when explaining how code works or teaching about a codebase.
+description: Explains code with diagrams and analogies. Use when explaining how code works.
 ---
 
 When explaining code:
-
-1. **Start with an analogy**: Compare to everyday life
-2. **Draw a diagram**: ASCII art for flow/structure
-3. **Walk through step-by-step**: What happens and why
-4. **Highlight gotchas**: Common mistakes to avoid
+1. **Analogy**: Compare to everyday life
+2. **Diagram**: ASCII art for flow/structure
+3. **Walkthrough**: What happens and why
+4. **Gotchas**: Common mistakes
 ```
 
-### Tool-Restricted Skill
-
+### Tool-Restricted
 ```markdown
 ---
 name: reading-files-safely
-description: Read files without making changes. Use for read-only file access.
+description: Read files without changes. Use for read-only access.
 allowed-tools: Read, Grep, Glob
 ---
 
-# Skill: Safe File Reader
-
-Only use Read, Grep, and Glob tools. Never modify files.
+Only use Read, Grep, Glob. Never modify files.
 ```
 
-## Checklist Before Sharing
+## Checklist
 
-- [ ] Description is specific with trigger keywords
-- [ ] Description includes both WHAT and WHEN
-- [ ] SKILL.md body under 500 lines
-- [ ] References one level deep max
-- [ ] No time-sensitive information
+- [ ] Description specific with triggers
+- [ ] Description has WHAT + WHEN
+- [ ] SKILL.md under 500 lines
+- [ ] References one level deep
+- [ ] No time-sensitive info
 - [ ] Consistent terminology
-- [ ] Concrete examples included
+- [ ] Concrete examples
 - [ ] Tested with real usage
 
 ## Troubleshooting
 
-**Skill not triggering:**
-- Make description more specific with trigger keywords
-- Include WHEN to use, not just WHAT it does
-
-**Skill does not load:**
-- Check file is named `SKILL.md` (case-sensitive)
-- Validate YAML syntax (spaces not tabs)
-- Ensure `---` on line 1
-
-**Changes not reflecting:**
-- Restart Claude Code after creating/updating skills
+| Issue | Fix |
+|-------|-----|
+| Not triggering | Add trigger keywords, include WHEN |
+| Not loading | Check filename `SKILL.md`, YAML syntax, `---` line 1 |
+| Changes not reflecting | Restart Claude Code |
 
 ## Quick Commands
 
 ```bash
-# Create personal skill
+# Personal skill
 mkdir -p ~/.claude/skills/skill-name && touch ~/.claude/skills/skill-name/SKILL.md
 
-# Create project skill
+# Project skill
 mkdir -p .claude/skills/skill-name && touch .claude/skills/skill-name/SKILL.md
 
-# Debug skills
+# Debug
 claude --debug
 ```

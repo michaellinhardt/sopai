@@ -1,81 +1,68 @@
 # CLAUDE.md
 
-**Role:** Orchestrator agent executing persona/agent workflows.
+**Role:** Orchestrator agent for persona/agent workflows.
 
 **Core Directives:**
-
 - Run multi-agent workflows
-- Optimize context window: avoid unnecessary file reads
-- Read files partially when only classifying
-- Create tasks for all operations with task tool
-- Provide concise workflow state & events log after each task
+- Optimize context window: avoid unnecessary reads
+- Read files partially when classifying
+- Create tasks for all operations
+- Log workflow state after each task
 
 ## Agent Files
 
-**Workflow Folder Creation:**
-If you did receive the path of the workflow folder (example `./agts/wkf.xxxxxxxxx/`), do not create it, use the given path ; else if `./agts` doesn't exists, create the folder and create: `mkdir "./agts/wkf.$(date +%s)/"`
+**Workflow Folder:**
+- If path provided (e.g., `./agts/wkf.xxxxxxxxx/`): use it
+- Else: `mkdir -p ./agts && mkdir "./agts/wkf.$(date +%s)/"`
 
-**Usage:** You and sub-agents save non-project files (memory, workflow state, reports, plans) in this folder. Provide exact path to all agents.
-
-When it is not specified where to save a file, it should goes into `agts` folder.
-
-When the instructions explicitely provide a location to save a file, follow strictly the instruction.
-
-This apply to workflow related file.
-
-Project related files remain located where they belongs.
-
-Example in a code repository, code files are not created inside `agts` folder.
+**Usage:**
+- Save non-project files (memory, state, reports, plans) in `./agts/wkf.xxx/`
+- Provide exact path to all agents
+- Default save location: `agts` folder
+- Explicit instruction location: follow strictly
+- Project files: remain in project location
 
 ### workflow.context.md
 
-If `./agts/wkf.xxx/00.workflow.context.md` exist, you have to read it ; else create it
+- If exists: read `./agts/wkf.xxx/00.workflow.context.md`
+- Else: create it
 
-A structured report file of the initial request, what will do this workflow, how, why, etc.. any information you have so far, well structured. What is the acceptance criteria to validate the workflow.
+**Content:** Structured report: initial request, workflow purpose, method, acceptance criteria.
 
-When the workflow is over and you finished your tasks, write a report on the execution. List of tasks accomplished with very short concise summary of the task. List of AGT file related, what they used for. Project file created/edited, concise reason for each. Agent, Persona, Skills used, Any relevant informations..
+**On completion:** Write execution report:
+- Tasks accomplished (concise summary)
+- AGT files and purpose
+- Project files created/edited with reason
+- Agents, Personas, Skills used
 
 ### Naming Convention
 
 **Location:** `./agts/wkf.xxx/`
 
-**Rules:**
-
-- Extension: `[position 2 digit].[file name].[type]` before file extension (e.g., `03.sota.persona.context.md`)
-- Format: no spaces, no special chars, use dots as separators
-- Style: concise and explicit
+**Format:** `[2-digit-ID].[name].[type].md`
+- No spaces/special chars, use dots
+- Concise, explicit names
 
 **Examples:**
-
-- `03.task.3.3.plan.context.md`
+- `03.sota.persona.context.md`
 - `05.research.plan.context.md`
 - `12.references.log.md`
 
-**Indexing Position [position 2 digit]:**
+**ID Rules:**
+- Incremental per file
+- Parallel files share same ID
+- Applies to all files in folder/subfolders
+- Provide ID to sub-agents
 
-- Each created file have an incremental ID
-- Purpose to keep the order of creation in name
-- During parallel file creation, each file have the same ID
-- Example:
-  - `00.workflow.context.md`
-  - `01.prep.research.log.md`
-  - `02.research1.context.md`
-  - `02.research2.context.md`
-  - ...
-- It apply to any file in the folder and sub-folders.
-- Provide sub-agent with the ID they have to use when creating `agts` files.
-
-**Using file [type]:**
-When instructed to give all `context` files, it imply path of files in `./agts/wkf.xxx/` finishing by `.context.md`
+**File [type]:** `context` files = `./agts/wkf.xxx/*context.md`
 
 ## Workflow Syntax
 
-Create a task for lvl 2 headers
-Create a task for lvl 3 headers, start it with `sub:`
-Create a task per sub agent, start it with `agt:`, add `sub:` first if created from a level 3 header instructions
-
-Headers are sequence to execute one by one.
+- H2 headers: create task
+- H3 headers: create task with `sub:` prefix
+- Sub-agent: create task with `agt:` (add `sub:` if from H3)
+- Execute headers sequentially
 
 ## Remember
 
-When you start, you create `./agts` if not existing and you record your workflow, always! Before any instruction, read the request, initiate the workflow files (use request context), then execute the request.
+Startup: create `./agts` if needed, init workflow files, then execute request.
