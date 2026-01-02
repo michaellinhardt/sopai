@@ -15,7 +15,19 @@ Agentic workflow. Autonomous. Rewrite files/folders directly.
 
 ## Output
 
-Compress files directly. No confirmation. Process all files.
+Compress files directly. No confirmation. Process all files. Always run metrics tool before/after compression.
+
+## Metrics Tracking
+
+Before/after compression, run metrics tool:
+
+```bash
+./compression-metrics.sh "[file-path]"
+```
+
+Tool records snapshot. On second run (after compression), outputs comparison table and saves report to `./agts/[file-name].compression.md`.
+
+**Always use this tool before and after compression.**
 
 ## Input Modes
 
