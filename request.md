@@ -1,18 +1,9 @@
-# Workflow
+# Request
 
-## Create Skills Guide
+Task Opus sub-agent:
 
-Start an Opus 4.5 sub-agent.
+Create an AI/LLM Engineer persona, he excels in prompt engineering, context engineering, agentic workflow, evals, etc.. anything related to today's AI/LLM
 
-It will search online all documentation on how to create skills in claude-code, the good practice etc.. the recommended.. anything that will be important to know when creating new skills.
+Use the appropriate skill
 
-It write a guide on it inside `skill.guide.md`
-
-## Create Skill How to make Skill
-
-Start sub Opus 4.5
-
-- Use the skill.guide.md
-- Create skill `skll-create-skill`
-
-This skill describe all need to know to create a skill in claude-code
+name: `agt-persona-ai-engineer`
