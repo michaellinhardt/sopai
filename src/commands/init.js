@@ -45,16 +45,9 @@ function linkItem(sourcePath, targetPath, itemName) {
 module.exports = function init() {
   console.log('sopai init - Linking Claude Code configuration\n');
 
-  const cwd = process.cwd();
-  const sourceDir = path.join(cwd, 'dot-claude');
+  // Source is the package's own dot-claude folder (relative to this file in src/commands/)
+  const sourceDir = path.join(__dirname, '..', '..', 'dot-claude');
   const targetDir = path.join(os.homedir(), '.claude');
-
-  // Validate source directory
-  if (!fs.existsSync(sourceDir)) {
-    console.error('Error: No dot-claude/ folder found in current directory.');
-    console.error('Create a dot-claude/ folder with your Claude Code configuration files.');
-    process.exit(1);
-  }
 
   // Create target directory
   try {
