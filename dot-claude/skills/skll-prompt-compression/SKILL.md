@@ -29,7 +29,7 @@ Before/after compression, run metrics tool:
 1. `workflow-folder` - The workflow folder name (e.g., `wkf.1767385361`)
 2. `file-path` - Path to the file being compressed
 
-Tool records snapshot. On second run (after compression), outputs comparison table and saves report to `./agts/[workflow-folder]/[file-name].compression.md`.
+Tool records snapshot. On second run (after compression), outputs comparison table and saves report to `./agts/[workflow-folder]/[file-name-without-ext].compression.md`.
 
 **Always use this tool before and after compression.**
 

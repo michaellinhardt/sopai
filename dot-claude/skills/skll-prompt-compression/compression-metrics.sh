@@ -40,6 +40,7 @@ CHAR_COUNT=$(wc -m < "$FILE_PATH" | tr -d ' ')
 TOKEN_ESTIMATE=$((CHAR_COUNT / 4))
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 FILE_NAME=$(basename "$FILE_PATH")
+FILE_NAME_NO_EXT="${FILE_NAME%.*}"
 
 # Create new snapshot
 NEW_SNAPSHOT=$(cat <<EOF
@@ -108,7 +109,7 @@ ${NEW_SNAPSHOT}
     # Save compression report
     REPORT_DIR="$AGTS_DIR/$WORKFLOW_FOLDER"
     mkdir -p "$REPORT_DIR"
-    REPORT_FILE="$REPORT_DIR/${FILE_NAME}.compression.md"
+    REPORT_FILE="$REPORT_DIR/${FILE_NAME_NO_EXT}.compression.md"
     cat > "$REPORT_FILE" <<REPORT
 # Compression Report: $FILE_NAME
 
