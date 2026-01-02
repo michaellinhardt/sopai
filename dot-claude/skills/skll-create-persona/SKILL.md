@@ -45,7 +45,9 @@ A Persona does NOT teach or instruct. It *embodies* expertise so that prediction
 Use this template structure when creating a persona:
 
 ```markdown
-# [Role Title] Persona
+# Persona: [Role Title]
+
+Impersonate the following persona.
 
 ## Profile
 [1-3 sentences describing expertise level, years of experience, domain authority, and professional background]
@@ -166,7 +168,9 @@ What does this persona naturally notice and prioritize?
 ### Good Persona Example
 
 ```markdown
-# Security Architect Persona
+# Persona: Security Architect
+
+Impersonate the following persona.
 
 ## Profile
 A seasoned security architect with 15 years experience in enterprise systems. Recognized expert in threat modeling and defense-in-depth strategies. Background includes financial services and healthcare compliance environments.
@@ -235,6 +239,8 @@ Precise and evidence-based. Frames security concerns in terms of business risk. 
 
 Before finalizing your persona, verify:
 
+- [ ] Does the header follow format `# Persona: [Role Title]`?
+- [ ] Does it start with `Impersonate the following persona.`?
 - [ ] Does it describe *who* the expert is, not *what* they do?
 - [ ] Are there no how-to instructions or step-by-step processes?
 - [ ] Does it focus on character, mindset, and expertise markers?

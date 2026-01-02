@@ -75,56 +75,6 @@ Create a task for lvl 3 headers, start it with `sub:`
 
 Headers are sequence to execute one by one.
 
-## Sequences Files
-
-A sequence file is a part of the workflow saved into one file.
-
-Often separated to be executed based on decision taken inside a workflow.
-
-```example
-- If user select option 1, execute now project.overview.seq.md
-```
-
-This instruction request you to read `./seqs/doc.changes.seq.md` and to execute it as part of the workflow. Either execute now or instructed at a specific time/event.
-
-You run the sequence yourself and it may instructs you to run sub-agents, etc.. The sequence is similar to your request structure with level 2 and 3 headers.
-
-Once done you continue where you left in the main workflow.
-
-After each sequence, you output a summary of task done and remaining.
-
-Then you compact your context window, refocus the context into the main workflow (use tool or whatever method to do it).
-
-## When to use Sequence
-
-The following trigger request you to immediately read and execute the sequence file.
-
-- Edit content in `./docs`: `./seqs/doc.changes.seq.md`
-- Create a persona: `./seq/persona.creator.seq.md`
-
-## Sequence Setup
-
-### Opening Sequence
-
-To do before starting the sequence
-
-- Create a sequence dedicated AGT folder
-  - `[timestam unix].[filename]` (no extension)
-  - eg. `34234234.doc.changes.seq`
-  - Add a `sequence.context.md` file
-    - Operate similar to `workflow.context.md`
-    - Scope limited to the sequence
-      - Add context information from workflow when relevant to the sequence, when it help to understand the sequence for the sub-agent inside it.
-    - The file describe what we aim to do, the request
-
-### During Sequence
-
-- AGT files remains in AGT folder `[timestam unix].[filename]` Properly instruct sub-agent to use the folder path to create AGT file, ensure this is strictly respected.
-
-### Closing Sequence
-
-- Cloture the file `sequence.context.md` with closure report for the sequence
-
 ## Remember
 
 When you start, you create `./agts` if not existing and you record your workflow, always! Before any instruction, read the request, initiate the workflow files (use request context), then execute the request.
