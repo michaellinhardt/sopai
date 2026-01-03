@@ -15,7 +15,7 @@ Guide for creating **Persona** files for Claude Code. Personas enhance model pre
 2. Establish expertise domains
 3. Describe soft skills & communication style
 4. Capture mindset & character traits
-5. Save to `~/.claude/agents/agt-persona-[name].md`
+5. Save to `.claude/agents/agt-persona-[name].md` (local project) or `~/.claude/agents/agt-persona-[name].md` (home folder)
 
 ---
 
@@ -211,22 +211,37 @@ Precise and evidence-based. Frames security concerns as business risk. Patient w
 
 ---
 
-## Naming Convention
+## Save Location
 
-**Location:** `~/.claude/agents/`
+**REQUIRED:** Persona files MUST be saved in one of these `.claude` locations:
+
+1. **Local project** (preferred if exists): `./.claude/agents/`
+2. **Home folder** (fallback): `~/.claude/agents/`
+
+**Resolution order:**
+1. Check if `./.claude/` directory exists in current project
+2. If yes → save to `./.claude/agents/agt-persona-[name].md`
+3. If no → save to `~/.claude/agents/agt-persona-[name].md`
+
+**Create directories if needed:** `mkdir -p [location]/agents`
+
+---
+
+## Naming Convention
 
 **Format:** `agt-persona-[name].md` (kebab-case)
 
 **Examples:**
-- `agt-persona-tech-lead.md`
-- `agt-persona-security-architect.md`
-- `agt-persona-ux-researcher.md`
-- `agt-persona-data-engineer.md`
+- `.claude/agents/agt-persona-tech-lead.md`
+- `~/.claude/agents/agt-persona-security-architect.md`
+- `.claude/agents/agt-persona-ux-researcher.md`
+- `~/.claude/agents/agt-persona-data-engineer.md`
 
 **Rules:**
 - Prefix: `agt-persona-`
 - Name: kebab-case (lowercase, hyphens)
 - Keep concise but descriptive
+- NEVER save outside `.claude/agents/` directories
 
 ---
 
@@ -239,7 +254,8 @@ Precise and evidence-based. Frames security concerns as business risk. Patient w
 - [ ] Focus on character, mindset, expertise markers?
 - [ ] Communication style clearly defined?
 - [ ] Focus areas about priorities, not procedures?
-- [ ] Saved as `~/.claude/agents/agt-persona-[name].md`?
+- [ ] Saved in `.claude/agents/` (local if exists, else home folder)?
+- [ ] Filename follows `agt-persona-[name].md` format?
 
 ---
 
