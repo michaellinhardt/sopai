@@ -11,7 +11,7 @@ Generate `guide.files.md` and `list.files.md` in `./agts` folder.
 
 A file used inside agentic workflow by agents to know which file to read/edit to accomplish their tasks. It describes what files are and when they can be used, relatively to the task/request invoked for the file guide.
 
-## Use Cases
+## Process
 
 1. **Input:** Work by analyzing workflow request directly or being invoked with a specific request that can be a list of paths (folder/files) to include in the file map
 
