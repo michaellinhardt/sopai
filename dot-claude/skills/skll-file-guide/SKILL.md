@@ -5,200 +5,49 @@ description: Generates files.agt.md documentation from file/folder paths for age
 
 # Skill: File Guide Generator
 
-Generate `files.agt.md` navigation maps for agents. Reduces context window usage.
+Generate `guide.files.md` and `list.files.md` in `./agts` folder.
 
 ## Purpose
 
-Create file documentation analyzing types, relationships, relevance to requests.
+A file used inside agentic workflow by agents to know which file to read/edit to accomplish their tasks. It describes what files are and when they can be used, relatively to the task/request invoked for the file guide.
 
 ## Use Cases
 
-### 1. Full Folder Mapping
-Generate complete file map of one or more folders. Use when sub-agents need to know all available files for incoming tasks.
+1. **Input:** Work by analyzing workflow request directly or being invoked with a specific request that can be a list of paths (folder/files) to include in the file map
 
-**Invocation:** Provide folder path(s) without specific task context.
-```
-/file-guide ./src ./docs
-```
+2. **Write file list:** Write all file paths identified in input inside `list.files.md` - starting point for analysis
 
-### 2. Workflow-Specific Mapping
-Given a workflow or task, analyze what files are related, explore dependencies, and generate a targeted file map.
+3. **Discovery mode:** Determine what each file is, how they are related, if other files should be listed. Maintain `list.files.md` with accurate list of files planned to map
 
-**Invocation:** Provide task description with optional paths.
-```
-/file-guide implement user auth using ./src/auth and ./docs/api-spec.md
-```
+4. **Study relationships:** Analyze relationships between each file and given request/workflow/task (if any). Remember the given task is not for you to do, only for context
 
-### 3. Sub-Agent Context Preparation
-Generate file lists organized by sub-agent responsibilities, minimizing context waste for each agent.
+5. **Write guide:** Once figured out, write `guide.files.md` in compressed manner using skill `skll-prompt-compression` to know how to write small AI Optimized file
 
-## Output Location
+6. **Answer:** Return ONLY the list of files mapped (full path) and for each, a one sentence description. Don't answer anything else to not disturb the workflow
 
-**Default:** `./agts/` folder (creates `files.agt.md` or `[name].files.agt.md`)
+## Rules
 
-**Custom location:** Specify output path in request.
-```
-/file-guide ./src --output ./src/FILES.md
-/file-guide ./project --output ./agts/wkf.xxx/03.project.files.context.md
-```
-
-**In-folder placement:** When analyzing a folder, can place guide inside that folder.
-```
-/file-guide ./my-module --output ./my-module/files.agt.md
-```
-
-## Workflow
-
-1. Parse request to identify referenced paths and implied file needs
-2. Automatically detect relevant files from context
-3. Analyze file types + relationships
-4. Generate output file at specified or default location
-
-## Automatic File Detection
-
-The skill implicitly deduces which files belong in the file map by:
-
-1. **Explicit paths**: Folders/files directly mentioned in the request
-2. **Task inference**: Files needed based on described tasks or sub-agents
-3. **Dependency analysis**: Related files discovered during exploration
-4. **Context relevance**: Files matching keywords/concepts in the request
-
-## Token Efficiency
-
-- Read first half of file for context
-- Read second half only if insufficient
-- Goal: first half suffices for classification
-
-## Exploration Scope
-
+- Read files 100 lines at a time to preserve context, keep reading until able to explain the file
+- Always write `guide.files.md` in agts folder, copy with bash when requested elsewhere
 - List files 2 parent levels up for context
 - Explore 2 levels deep in provided folders
-- Skip repetitive patterns:
+- Skip repetitive patterns (e.g., `img01/`, `img02/`, `img03/` - explore one, skip rest)
 
-```
-./FolderA/
-  ./FolderA/img01/  [explore one]
-  ./FolderA/img02/  [skip - same pattern]
-  ./FolderA/img03/  [skip]
-```
-
-## Output Format
-
-### Without Request Context
+## Structure for guide.files.md
 
 ```markdown
 # Files Guide for Agents
 
+## File List
+
+[bullet list of files (full path)]
+
+## Descriptions
+
 `./[path]`
 
-- [file description]
-- [relevant request parts; "none" if irrelevant]
+- [file description concise]
+- [relevant request parts if any]
 - [irrelevant parts if applicable]
 - [other instructions]
 ```
-
-### With Request Context
-
-When request includes file/folder paths OR describes tasks requiring file lists:
-
-**First paragraph verbatim (required):**
-```
-This document is the list of file needed to be use to accomplish this request. Use it to provide agents with only the required files for their task, saving context window and token.
-```
-
-```markdown
-# Agent File Guide
-
-This document is the list of file needed to be use to accomplish this request. Use it to provide agents with only the required files for their task, saving context window and token.
-
-## Project context:
-
-- `./context.md` project context
-- `./changes.md` recent changes
-
-## [Sub-agent/Task Name]:
-
-- [Project context files]
-- `./specific/file.md` description
-```
-
-## Folder Structure
-
-Include visualization showing hierarchy and relationships:
-
-```
-Project Context (C0 - 00 Project Context.md)
-└── Defines entire project philosophy
-├── Module List & Summary (C0 - 00 Module List & Content summary.md)
-│   └── Shows module structure
-└── Module 1 - Prompting
-    ├── Module Overview (C0 - M1 - 00 Module Overview.md) <- MASTER REFERENCE
-    │   └── Derives from Project Context
-    │       ├── Script (C0 - M1 - 01 Script.md)
-    │       │   └── Implementation of teaching sequence
-    ├── Assets (Teaching Materials)
-    │   ├── Japanese Menu.md
-    │   └── Japanese Trip.md
-    ├── plan brainstorm.md
-    └── request brainstorm.md
-```
-
-## Constraints
-
-- Max 3 header levels
-- Minimal markdown formatting
-- Compact structure
-- Focus: clarity + token efficiency
-
-## Context
-
-Standalone skill, runs before sub-agent initiation. If request unknown, reverse-engineer purpose from file contents.
-
-## Task Identification
-
-Identify file needs by analyzing:
-1. Explicit folder/file paths in the request
-2. Tasks/sub-tasks that imply specific file requirements
-3. Domain keywords that map to project areas
-
-## Example Parsing
-
-**Input:**
-```
-analyze ./src/auth/ and ./docs/api-spec.md for implementing user authentication, then start 2 sub-agents: one for backend auth logic, one for API documentation updates.
-```
-
-**Automatic detection identifies:**
-- `./src/auth/` folder for authentication implementation
-- `./docs/api-spec.md` for API specification
-- Backend sub-agent needs: auth source files + related configs
-- Docs sub-agent needs: API spec + related documentation
-
-**Output:**
-```markdown
-# Agent File Guide
-
-This document is the list of file needed to be use to accomplish this request. Use it to provide agents with only the required files for their task, saving context window and token.
-
-## Project context:
-
-- `./context.md` project context
-- `./docs/architecture.md` system architecture overview
-
-## Backend auth sub-agent:
-
-- [Project context files]
-- `./src/auth/login.ts` login handler implementation
-- `./src/auth/session.ts` session management
-- `./src/auth/middleware.ts` auth middleware
-- `./config/auth.json` authentication configuration
-
-## API docs sub-agent:
-
-- [Project context files]
-- `./docs/api-spec.md` current API specification
-- `./docs/endpoints/` endpoint documentation folder
-- `./src/auth/` reference for auth endpoints to document
-```
-
-**Generates sections based on detected paths and inferred task requirements.**
