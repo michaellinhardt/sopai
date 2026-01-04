@@ -22,14 +22,16 @@ Compress files directly. No confirmation. Process all files. Always run metrics 
 Before/after compression, run metrics tool:
 
 ```bash
-./compression-metrics.sh "[workflow-folder]" "[file-path]"
+./compression-metrics.sh "[workflow-path]" "[file-path]"
 ```
 
 **Arguments:**
-1. `workflow-folder` - The workflow folder name (e.g., `wkf.1767385361`)
-2. `file-path` - Path to the file being compressed
+1. `workflow-path` - **Full absolute path** to workflow folder (e.g., `/Users/xxx/workspace/agts/wkf.1767385361`)
+2. `file-path` - Absolute path to the file being compressed
 
-Tool records snapshot. On second run (after compression), outputs comparison table and saves report to `./agts/[workflow-folder]/[file-name-without-ext].compression.md`.
+Tool records snapshot. On second run (after compression), outputs comparison table and saves report to `[workflow-path]/[file-name-without-ext].compression.md`.
+
+**Concurrency:** Safe for multiple agents compressing different files simultaneously. Each file snapshot is isolated via path hash.
 
 **Always use this tool before and after compression.**
 

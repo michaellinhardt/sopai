@@ -7,22 +7,30 @@
 set -e
 
 METRICS_DIR="$HOME/.compression-metrics"
-AGTS_DIR="./agts"
 
 # Create metrics directory if needed
 mkdir -p "$METRICS_DIR"
-# AGTS_DIR created as needed when writing report
+
+# Clean stale snapshots (older than 24h)
+find "$METRICS_DIR" -name "*.json" -mtime +1 -delete 2>/dev/null || true
 
 # Check arguments
 if [ -z "$1" ] || [ -z "$2" ]; then
-    echo "Usage: compression-metrics.sh <workflow-folder> <file-path>"
-    echo "  workflow-folder: The workflow folder name (e.g., wkf.1767385361)"
-    echo "  file-path: Path to the file being compressed"
+    echo "Usage: compression-metrics.sh <workflow-path> <file-path>"
+    echo "  workflow-path: Full absolute path to workflow folder (e.g., /Users/xxx/workspace/agts/wkf.1767385361)"
+    echo "  file-path: Absolute path to the file being compressed"
     exit 1
 fi
 
-WORKFLOW_FOLDER="$1"
+WORKFLOW_PATH="$1"
 FILE_PATH="$2"
+
+# Validate workflow path is absolute
+if [[ "$WORKFLOW_PATH" != /* ]]; then
+    echo "Error: workflow-path must be an absolute path (starts with /)"
+    echo "Received: $WORKFLOW_PATH"
+    exit 1
+fi
 
 # Verify file exists
 if [ ! -f "$FILE_PATH" ]; then
@@ -107,7 +115,7 @@ ${NEW_SNAPSHOT}
     echo ""
 
     # Save compression report
-    REPORT_DIR="$AGTS_DIR/$WORKFLOW_FOLDER"
+    REPORT_DIR="$WORKFLOW_PATH"
     mkdir -p "$REPORT_DIR"
     REPORT_FILE="$REPORT_DIR/${FILE_NAME_NO_EXT}.compression.md"
     cat > "$REPORT_FILE" <<REPORT
