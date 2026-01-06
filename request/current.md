@@ -18,10 +18,50 @@ The tool use SQLite to manage meta data about every files inside the folder. The
 
 When the tool receive a command. If the const SAVE_INPUTS is on, it always save the entire parameters he received in `./docs/inputs/[timestamp unix].input.md` This for debug
 
+## Challenges
+
+When creating or editing new docs, the model should have means to know if any related docs already exist or even maybe there is docs on the feature already. It needs a way to search existing content.
+
 ## Auto generate asset
 
 When ./docs or the SQL file does not exist, the tool when used, generates it.
 
-## List of command from the tool
+## Files Metadata
 
-- One command to obtain the 
+Each files have metadata associated and saved in the SQLite.
+
+description: [one sentence describing the file, to help agent to know if they need it or not]
+sections: a sections ID, from available sections ID, each file have one from the list
+path: [file path]
+
+### Meta Data Example
+
+```json
+[{
+    id: "123123",
+    path: "./file/path.md",
+    description: "the description",
+    sections: "functional",
+},{
+    id: "123123",
+    path: "./file/path.md",
+    description: "the description",
+    sections: "database",
+}]
+```
+
+## Files Map Metadata
+
+The relationship between files is stored in a separate table.
+We create links between feature.
+
+
+## Sections
+
+Default sesctions are:
+
+- functional: functional documentation
+- technical: technical documentation
+- architecture: code/folders, design pattern, architecture etc..
+- ui-ux: related to ui or ux
+- database: related to database structure, tables etc..
