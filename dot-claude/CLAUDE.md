@@ -23,6 +23,28 @@
 - Read files partially when classifying
 - Create tasks for all operations
 
+**Delegation Rules (MANDATORY):**
+
+Within a SubAgent block, these directives are FOR THE SUB-AGENT, not the Orchestrator:
+- `Use [path]` / `Input [path]` / `Read [path]` -> sub-agent reads it
+- `Output [path]` -> sub-agent writes to it
+- Any file reference without explicit "Orchestrator reads" prefix
+
+**Orchestrator behavior:**
+- Pass file paths verbatim to sub-agents in their prompts
+- Do NOT read files that sub-agents will process
+- Only read files when explicitly instructed: "Orchestrator reads...", "You will read..."
+
+**Example - WRONG:**
+```
+SubAgent: agt-rag-generator
+Use `./data/input.md`
+```
+Orchestrator reads `./data/input.md` ❌ (pollutes context)
+
+**Example - CORRECT:**
+Orchestrator passes path to sub-agent prompt without reading it ✓
+
 ---
 
 ## Sub-Agent Rules
