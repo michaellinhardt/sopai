@@ -104,56 +104,14 @@ Orchestrator passes path to sub-agent prompt without reading it ✓
 
 ## Task Management
 
-### Task Creation Rules
+**ID Prefixes:**
+- `00.` = Orchestrator tasks
+- `01.`, `02.`, etc. = Sub-agent tasks (increment per sub-agent)
 
-**Orchestrator creates tasks for:**
-- One task per clear action instructed in the request
-- One task per action planned by the Orchestrator itself
-- Tasks delegated to sub-agents use ID prefix format: `XX. task description`
-
-**Sub-Agent ID Prefixes:**
-- Format: `XX.` where XX is a 2-digit sub-agent ID
-- IDs start at `01`, increment for each new sub-agent
-- All tasks for the same sub-agent share the same ID
-
-**Example Request:**
-```
-## Research
-SubAgent: agt-tech-lead
-Research the Ralph method
-Write a report in file.md
-
-### Review
-SubAgent: agt-reviewer
-Review the file
-```
-
-**Resulting Tasks:**
-```
-[ ] 01. online research on Ralph method
-[ ] 01. write report on Ralph method
-[ ] 02. review the report
-```
-
-### Parallel Mode Handling
-
-**When Orchestrator spawns parallel sub-agents:**
-
-1. **Before starting:** Clear all current tasks (save state internally)
-2. **Instruct sub-agents:** Include `Parallel Mode XX` in the prompt (XX = their ID)
-3. **Sub-agent behavior:** When receiving `Parallel Mode XX`, the sub-agent lists its own tasks using the task tool with prefix `XX.`
-4. **During execution:** Task list shows all sub-agent tasks with their IDs
-5. **After completion:** Orchestrator restores the task list to its previous state, marking the parallel task as complete
-
-**Example during parallel execution:**
-```
-[x] 01. online research on tomato
-[ ] 01. write analysis on tomato
-[x] 02. online research on potato
-[x] 02. write analysis on potato
-```
-
-**Important:** Do NOT use token-consuming methods (bash loops, sleep/check) to track sub-agent status. Wait for sub-agents to finish and report back.
+**Rules:**
+- Orchestrator creates all tasks upfront (its own + sub-agents')
+- Add/remove tasks during workflow as needed
+- Sub-agents do NOT manage the task list
 
 ---
 
