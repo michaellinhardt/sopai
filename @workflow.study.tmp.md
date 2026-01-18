@@ -1,57 +1,68 @@
 @workflow.study.tmp.md
 
-  The Orchestrator MUST use the task tool as follow, but not only, if requested by user, other task can
-  be listed.
+I will demonstrate a problem.
 
-  I dont want the task to be related to header anymore.
+Below is an instruction passed to the Orchestrator:
 
-  The Orchestrator will create one task per clear action instructed in the request, or per action planned to do by itself.
+```markdown
+# Ralph
 
-  It also create task for every clear actio instructed to sub agent, with prefix `01 `. The number is the subagent id, start 1, increment for each new. If one subagent have multiple task, they are listed with the same id
+## Transcript
 
-  What task to create ? One per main action to do in the header section.
+SubAgent `agt-rag-generator`
+Use `./request/ralph.transcript.md`
+Output `./request/ralph.rag.md`
 
-  Example:
+## Fact Checks
 
-  ```request input
-  ## Research
+### Not Parallel
 
-  SubAgent: `agt-tech-lean`
-  Output: `file.md`
+SubAgent `agt-technical-lead`
+Output: `facts.list.md` (AGT)
 
-  Research the Ralph method
+All facts identified in the rag.
 
-  Write a report in file.md
+- About popularity
+- What it accomplish
+- etc..
 
-  ### Review
+Make a one sentence per facts in this file.
 
-  Sub Agent
-  Output: review.md
+### Parallel per facts listed
 
-  Review the file
-  ```
+SubAgent `agt-technical-lead`
+Output: `[snakeCaseFactShortName].check.md`
 
-  ```task
-  [ ] 01. online research on Ralph method
-  [ ] 01. write report on ralph method
-  [ ] 02. review the report
-  ```
+Check online about this fact. Avoid commercial / sponsored content unles it's simply documentation.
 
-  When Orchestrator wait for parallel subagent to finish:
+## Report
 
-  - Clear all task
-  - Create a new task list, one per sub agent '#1: ' with what they are doing (number as id for agent). You
-  list all main task per subagent, example:
+SubAgent `agt-technical-lead`
+Output: `ralph.report.md`
 
-  ```task
-  [x] 01. online research on tomato
-  [ ] 01. write analysis on tomato
-  [x] 02. online research on tomato
-  [x] 02. write analysis on tomato
-  ```
+Review all information, write me a final report on Ralph. I want to know everything, you can online search. Use our materials. If any facts are wrong or exagerated in the rag, mention it in one specific category separated.
+```
 
-  Visually, we Orchestrator wait for parallel agent to all complete, we should see the list of task of those sub agent. Do not use any method to track the status that would consume token, such as a bash loop to sleep and check result. If the subagent is busy, wait for it to finish and inform you. 
+This is the Orchestrator response
 
-  - if possible for the sub agent to use the same task tool, it should be instructed to complete the task or add task itself !
+```orchestrator
+I'll orchestrate this workflow. Let me start by setting up the workflow folder and context.
 
-  OK so new idea ! when the orchestrator wait for sub agent to finish (one or many) without having anything to do: the orchestrator before starting the sub agent(s) clear the task list. The sub agent, when receiving from Orchestrator a specific instruction such as `Parallel Mode 01`, knows what he have to do, the subagent will list the task it have to do with the task tool, using the id `01.`. When all subagent finish, Orchestrator restore the task in the exact same state before starting. It include a task related to this specifc parallel task that just done
+⏺ Bash(mkdir -p ./agts && mkdir "./agts/wkf.$(date +%s)/" && ls -la ./agts/ | grep wkf | tail -1)
+  ⎿  drwxr-xr-x@  2 teazyou  staff   64 Jan 19 03:05 wkf.1768766701
+
+⏺ Read(request/ralph.transcript.md)
+  ⎿  Read 892 lines
+```
+
+As you can see it reads the request transcript, however in my request, only subagent works on the task itself, there is no reason for Orchestrator to pollute its context. The orchestrator context should remain as much as possible focus on orchestrating subagent and tasks. Reading this file is for the sub agent. This should be enforced. Only when explicitely stated such as `You will read online` then its for the Orchestrator and its ok. In this block of instructions:
+
+```instructions
+## Transcript
+
+SubAgent `agt-rag-generator`
+Use `./request/ralph.transcript.md`
+Output `./request/ralph.rag.md`
+```
+
+It is implicit that the `Use` is for the sub agent. In that case the Orchestrator, blindly instruct the agent.
