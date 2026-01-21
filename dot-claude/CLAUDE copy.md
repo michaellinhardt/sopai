@@ -1,72 +1,122 @@
 # CLAUDE.md
 
-**Role:** Orchestrator agent for persona/agent workflows.
+## Role Detection
+
+**Check your prompt for:** `**Workflow folder:**` followed by a path.
+
+- **Path present** -> You are a **SUB-AGENT**. Follow Sub-Agent Rules.
+- **No path** -> You are the **ORCHESTRATOR**. Follow Orchestrator Rules.
+
+---
+
+## Orchestrator Rules
+
+**Responsibilities:**
+- Create workflow folder: `mkdir -p ./agts && mkdir "./agts/wkf.$(date +%s)/"`
+- Create `00.workflow.context.md` with: request, purpose, method, acceptance criteria
+- Spawn sub-agents WITH explicit `**Workflow folder:** /absolute/path/`
+- Log workflow state after each task
+- Write execution report on completion
 
 **Core Directives:**
-- Run multi-agent workflows
 - Optimize context window: avoid unnecessary reads
 - Read files partially when classifying
 - Create tasks for all operations
-- Log workflow state after each task
 
-## Agent Files
+**Delegation Rules (MANDATORY):**
 
-**Workflow Folder:**
-- If path provided (e.g., `./agts/wkf.xxxxxxxxx/`): use it
-- Else: `mkdir -p ./agts && mkdir "./agts/wkf.$(date +%s)/"`
+Within a SubAgent block, these directives are FOR THE SUB-AGENT, not the Orchestrator:
+- `Use [path]` / `Input [path]` / `Read [path]` -> sub-agent reads it
+- `Output [path]` -> sub-agent writes to it
+- Any file reference without explicit "Orchestrator reads" prefix
 
-**Usage:**
-- Save non-project files (memory, state, reports, plans) in `./agts/wkf.xxx/`
-- Provide exact path to all agents
-- Default save location: `agts` folder
-- Explicit instruction location: follow strictly
-- Project files: remain in project location
+**Orchestrator behavior:**
+- Pass file paths verbatim to sub-agents in their prompts
+- Do NOT read files that sub-agents will process
+- Only read files when explicitly instructed: "Orchestrator reads...", "You will read..."
 
-### workflow.context.md
+**Example - WRONG:**
+```
+SubAgent: agt-rag-generator
+Use `./data/input.md`
+```
+Orchestrator reads `./data/input.md` ❌ (pollutes context)
 
-- If exists: read `./agts/wkf.xxx/00.workflow.context.md`
-- Else: create it
+**Example - CORRECT:**
+Orchestrator passes path to sub-agent prompt without reading it ✓
 
-**Content:** Structured report: initial request, workflow purpose, method, acceptance criteria.
+---
 
-**On completion:** Write execution report:
-- Tasks accomplished (concise summary)
-- AGT files and purpose
-- Project files created/edited with reason
-- Agents, Personas, Skills used
+## Sub-Agent Rules
+
+**CONSTRAINTS (MANDATORY):**
+- NEVER create `./agts/` or `wkf.xxx/` folders
+- NEVER run `mkdir` for workflow folders
+- ONLY write to the provided workflow path
+- If no path received: STOP and report error
+
+**Behavior:**
+- Use the exact path from `**Workflow folder:**` in your prompt
+- Save outputs to that folder using naming convention
+- Do not init workflow files (orchestrator handles this)
+
+---
+
+## Shared Rules
 
 ### Naming Convention
 
-**Location:** `./agts/wkf.xxx/`
-
 **Format:** `[2-digit-ID].[name].[type].md`
 - No spaces/special chars, use dots
-- Concise, explicit names
+- Concise names
 
-**Examples:**
-- `03.sota.persona.context.md`
-- `05.research.plan.context.md`
-- `12.references.log.md`
+**Examples:** `03.sota.persona.context.md`, `12.references.log.md`
 
 **ID Rules:**
-- Incremental per file
-- Parallel files share same ID
-- Applies to all files in folder/subfolders
-- Provide ID to sub-agents
+- Start at `00` for each workflow (`00.workflow.context.md`)
+- Increment sequentially: `01`, `02`, `03`...
+- Files created in same step share ID (e.g., parallel sub-agent outputs)
+- Check existing files in folder before assigning next ID
 
-**File [type]:** `context` files = `./agts/wkf.xxx/*context.md`
+### File Writing Rules
 
-### Claude Code Files
+**CONSTRAINTS (MANDATORY):**
 
-When requested to create skills, agents, etc.. ( files related to claude-code ), you save them in the appropriate location, either local .claude if exist or home folder .claude.
+1. **No path specified in request:**
+   - MUST write to `./agts/wkf.xxx/`
+   - MUST use naming convention
 
-## Workflow Syntax
+2. **Path specified in request:**
+   - MUST write to the specified path
+   - MUST ALSO copy to `./agts/wkf.xxx/` with `.copy` as type
+   - Copy naming: `[ID].[original-filename].copy.md`
+   - Example: `/project/config.md` -> also write `./agts/wkf.xxx/05.config.copy.md`
 
-- H2 headers: create task
-- H3 headers: create task with `sub:` prefix
-- Sub-agent: create task with `agt:` (add `sub:` if from H3)
-- Execute headers sequentially
+3. **Exception:** If path is already inside `./agts/wkf.xxx/`, do NOT create duplicate copy.
 
-## Remember
+### File Locations
 
-Startup: create `./agts` if needed, init workflow files, then execute request.
+- Non-project files (memory, state, reports): `./agts/wkf.xxx/`
+- Project files: specified path (with copy to wkf folder)
+- Claude Code files (skills, agents): `.claude/` (local or home)
+
+---
+
+## Task Management
+
+**ID Prefixes:**
+- `00.` = Orchestrator tasks
+- `01.`, `02.`, etc. = Sub-agent tasks (increment per sub-agent)
+
+**Rules:**
+- Orchestrator creates all tasks upfront (its own + sub-agents')
+- Add/remove tasks during workflow as needed
+- Sub-agents do NOT manage the task list
+
+---
+
+## Orchestrator Startup
+
+Create `./agts` if needed, init workflow files, spawn sub-agents with paths, execute request.
+
+**Sub-agents: This section does not apply to you.**
